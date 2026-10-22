@@ -56,7 +56,7 @@
                         <div class="config-row">
                             <div class="config-item">
                                 <label for="deviceMac">设备MAC:</label>
-                                <input type="text" id="deviceMac" placeholder="device-id" disabled>
+                                <input type="text" id="deviceMac" value="02:00:00:00:7E:57" placeholder="device-id" disabled>
                             </div>
                             <div class="config-item">
                                 <label for="deviceName">设备名称:</label>
@@ -92,12 +92,92 @@
                     </button>
                 </h2>
                 <div class="connection-controls">
-                    <input type="text" id="otaUrl" value="https://xiaozhi.jamesweb.org/api/ota/"
+                    <input type="text" id="otaUrl" value="http://10.88.2.216:8102/xiaozhi/ota/"
                         placeholder="OTA服务器地址" />
                     <input type="text" id="serverUrl" value="" readonly disabled placeholder="点击连接按钮后，自动从OTA接口获取" />
                 </div>
             </div>
 
+        </div>
+
+        <!-- Worker 参数模拟面板：模拟 Cloudflare Worker 上行参数帧 -->
+        <div class="section">
+            <h2>
+                Worker 参数模拟
+                <span class="connection-status">
+                    <span id="workerModeStatus" class="status">● 未启用</span>
+                </span>
+            </h2>
+            <div class="config-panel" id="workerParamsPanel">
+                <div class="control-panel">
+                    <div class="config-row">
+                        <div class="config-item" style="flex:1;">
+                            <label class="auto-record-toggle" style="margin:0; cursor:pointer;">
+                                <input type="checkbox" id="workerModeToggle">
+                                <span class="toggle-slider-small"></span>
+                                <span class="toggle-text">作为 Worker 连接（带 ?worker=1 标记 + hello 前发参数帧）</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="config-row">
+                        <div class="config-item">
+                            <label for="wpVoice">音色 voice（留空=跟随角色）:</label>
+                            <input type="text" id="wpVoice" placeholder="该 TTS 引擎的合法音色ID">
+                        </div>
+                        <div class="config-item">
+                            <label for="wpRate">语速 rate（0=不覆盖）:</label>
+                            <input type="range" id="wpRate" min="-100" max="100" step="10" value="0"
+                                style="width:120px; vertical-align:middle;">
+                            <span id="wpRateValue"
+                                style="font-family:monospace; font-weight:bold; color:#2196F3;">0</span>
+                        </div>
+                    </div>
+                    <div class="config-row">
+                        <div class="config-item">
+                            <label for="wpPromptMode">人设模式 prompt_mode:</label>
+                            <select id="wpPromptMode"
+                                style="width:100%; padding:8px; border:1px solid #ddd; border-radius:5px;">
+                                <option value="append">append（追加到角色人设后）</option>
+                                <option value="replace">replace（整体替换）</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="config-row">
+                        <div class="config-item" style="flex:1;">
+                            <label for="wpPrompt">人设 system_prompt（留空=跟随角色）:</label>
+                            <textarea id="wpPrompt" rows="2"
+                                placeholder="如：你是测试员小豹，说话每句以'喵'结尾。"
+                                style="width:100%; padding:8px; border:1px solid #ddd; border-radius:5px; resize:vertical;"></textarea>
+                        </div>
+                    </div>
+                    <div class="config-row">
+                        <div class="config-item">
+                            <label for="wpMemoryMode">记忆 memory 三态:</label>
+                            <select id="wpMemoryMode"
+                                style="width:100%; padding:8px; border:1px solid #ddd; border-radius:5px;">
+                                <option value="follow">跟随角色（不发 memory 键）</option>
+                                <option value="off">关闭（enabled:false）</option>
+                                <option value="content">覆盖（content 上传）</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="config-row" id="wpMemoryContentRow" style="display:none;">
+                        <div class="config-item" style="flex:1;">
+                            <label for="wpMemoryContent">记忆内容 content（空=回落跟随）:</label>
+                            <textarea id="wpMemoryContent" rows="2"
+                                placeholder="如：用户名叫阿伟，喜欢听摇滚，养了一只叫团子的猫。"
+                                style="width:100%; padding:8px; border:1px solid #ddd; border-radius:5px; resize:vertical;"></textarea>
+                        </div>
+                    </div>
+                    <div class="config-row">
+                        <div class="config-item" style="flex:1;">
+                            <label>将发送的参数帧（连接后、hello 之前）:</label>
+                            <pre id="wpPreview"
+                                style="margin:4px 0 0; padding:10px; background:#f5f7fa; border:1px solid #e0e0e0; border-radius:5px; font-family:'Courier New',monospace; font-size:12px; white-space:pre-wrap; color:#333;">（未启用 Worker 模式——连接时不发参数帧、不带 worker 标记）</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="section">

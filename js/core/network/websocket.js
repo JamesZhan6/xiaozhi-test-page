@@ -6,6 +6,7 @@ import { getConfig, saveConnectionUrls } from '../../config/manager.js';
 import { getAudioPlayer } from '../audio/player.js';
 import { getAudioRecorder } from '../audio/recorder.js';
 import { getMcpTools, executeMcpTool, setWebSocket as setMcpWebSocket } from '../mcp/tools.js';
+import { isWorkerModeEnabled, buildWorkerParamsFrame } from './worker-params.js';
 
 // WebSocket处理器类
 export class WebSocketHandler {
@@ -270,6 +271,14 @@ export class WebSocketHandler {
             this.isRemoteSpeaking = false;
             if (this.onSessionStateChange) {
                 this.onSessionStateChange(false);
+            }
+
+            // Worker 模拟：参数帧必须在 hello 之前发送
+            // （上游在连接初始化、组件实例化之前消费它，晚了会被丢弃）
+            if (isWorkerModeEnabled()) {
+                const frame = JSON.stringify(buildWorkerParamsFrame());
+                this.websocket.send(frame);
+                log(`已发送 worker 参数帧: ${frame}`, 'info');
             }
 
             await this.sendHelloMessage();

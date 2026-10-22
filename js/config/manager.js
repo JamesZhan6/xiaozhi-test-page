@@ -21,13 +21,12 @@ export function loadConfig() {
     const tokenInput = document.getElementById('token');
     const otaUrlInput = document.getElementById('otaUrl');
 
-    // 从localStorage加载MAC地址，如果没有则生成新的
+    // 从localStorage加载MAC地址，如果没有则使用HTML默认值
     let savedMac = localStorage.getItem('xz_tester_deviceMac');
-    if (!savedMac) {
-        savedMac = generateRandomMac();
-        localStorage.setItem('xz_tester_deviceMac', savedMac);
+    if (savedMac) {
+        deviceMacInput.value = savedMac;
     }
-    deviceMacInput.value = savedMac;
+    // 如果HTML有默认值就用默认值，不随机生成
 
     // 从localStorage加载其他配置
     const savedDeviceName = localStorage.getItem('xz_tester_deviceName');

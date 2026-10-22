@@ -4,6 +4,7 @@ import { checkOpusLoaded, initOpusEncoder } from './core/audio/opus-codec.js';
 import { getUIController } from './ui/controller.js';
 import { getAudioPlayer } from './core/audio/player.js';
 import { initMcpTools } from './core/mcp/tools.js';
+import { initWorkerParamsUI } from './core/network/worker-params.js';
 
 // 应用类
 class App {
@@ -32,6 +33,9 @@ class App {
 
         // 初始化MCP工具
         initMcpTools();
+
+        // 初始化 Worker 参数模拟面板（预览/联动/持久化）
+        initWorkerParamsUI();
 
         log('应用初始化完成', 'success');
     }

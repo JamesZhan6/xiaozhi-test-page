@@ -1,5 +1,6 @@
 import { otaStatusStyle } from '../../ui/dom-helper.js';
 import { log } from '../../utils/logger.js';
+import { isWorkerModeEnabled } from './worker-params.js';
 
 // WebSocket 连接
 export async function webSocketConnect(otaUrl, config) {
@@ -40,6 +41,12 @@ export async function webSocketConnect(otaUrl, config) {
     // 添加认证参数（保持原有逻辑）
     connUrl.searchParams.append('device-id', config.deviceId);
     connUrl.searchParams.append('client-id', config.clientId);
+
+    // Worker 模拟：浏览器 WS 无法自定义 header，用 ?worker=1 声明
+    // （上游 websocket_server.py 会映射为 x-worker 头，等价 X-Worker: 1）
+    if (isWorkerModeEnabled()) {
+        connUrl.searchParams.append('worker', '1');
+    }
 
     const wsurl = connUrl.toString()
 
